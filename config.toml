@@ -2,5 +2,11 @@
 extra=[]
 
 [repository]
-root=""
+root="/home/dz/Desktop/fastapi-clean-example"
 vcs="git"
+
+[repository.git]
+respect_gitignore=true
+
+[indexing]
+languages=["python"]
