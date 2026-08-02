@@ -1,0 +1,6 @@
+[ignore]
+extra=[]
+
+[repository]
+root=""
+vcs="git"
