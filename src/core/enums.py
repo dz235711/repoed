@@ -1,5 +1,6 @@
 from enum import StrEnum
 
+
 class VCS(StrEnum):
     GIT = "git"
     MERCURIAL = "mercurial"
@@ -7,6 +8,7 @@ class VCS(StrEnum):
     BAZAAR = "bazaar"
     FOSSIL = "fossil"
     CVS = "cvs"
+
 
 class Language(StrEnum):
     PYTHON = "python"
