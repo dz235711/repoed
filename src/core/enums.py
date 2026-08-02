@@ -1,6 +1,6 @@
-from enum import Enum
+from enum import StrEnum
 
-class VCS(str, Enum):
+class VCS(StrEnum):
     GIT = "git"
     MERCURIAL = "mercurial"
     SUBVERSION = "subversion"
@@ -8,7 +8,7 @@ class VCS(str, Enum):
     FOSSIL = "fossil"
     CVS = "cvs"
 
-class Language(str, Enum):
+class Language(StrEnum):
     PYTHON = "python"
     JAVASCRIPT = "javascript"
     JAVA = "java"
