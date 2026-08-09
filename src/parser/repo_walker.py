@@ -7,6 +7,8 @@ from config.vcs import get_vcs_profile, VcsProfile
 from config.languages import get_language_profiles, LanguageProfile
 from config.config import Config
 
+type IgnoreRule = Callable[[Path], bool]
+
 
 def walk_repo(config: Config) -> Generator[Path, None, None]:
     language_profiles = get_language_profiles(list(config.indexing.languages))
@@ -22,7 +24,7 @@ def walk_repo(config: Config) -> Generator[Path, None, None]:
 
 @contextmanager
 def _ignore_rules_context(
-    path: Path, ignore_rules: list[Callable[[Path], bool]], vcs_profile: VcsProfile
+    path: Path, ignore_rules: list[IgnoreRule], vcs_profile: VcsProfile
 ) -> Generator[None, None, None]:
     ignore_file = path / vcs_profile.ignore_filename
     has_ignore_file = ignore_file.exists()
@@ -38,7 +40,7 @@ def _ignore_rules_context(
 
 
 def _walk_repo(
-    path: Path, ignore_rules: list[Callable[[Path], bool]], vcs_profile: VcsProfile
+    path: Path, ignore_rules: list[IgnoreRule], vcs_profile: VcsProfile
 ) -> Generator[Path, None, None]:
     if path.is_dir():
         with _ignore_rules_context(path, ignore_rules, vcs_profile):
