@@ -1,0 +1,50 @@
+from pathlib import Path
+from typing import Generator, Callable
+from contextlib import contextmanager
+from itertools import chain
+
+from core.deps import get_config
+from core.vcs import get_vcs_profile, VcsProfile
+from core.languages import get_language_profiles, LanguageProfile
+
+
+def walk_repo() -> Generator[Path, None, None]:
+    config = get_config()
+    language_profiles = get_language_profiles(config.indexing.languages)
+    language_extensions = set(
+        chain.from_iterable(map(lambda lp: lp.extensions, language_profiles))
+    )
+    yield from _walk_repo(
+        config.repository.root,
+        [lambda path: path.suffix not in language_extensions],
+        get_vcs_profile(config.repository.vcs),
+    )
+
+
+@contextmanager
+def _ignore_rules_context(
+    path: Path, ignore_rules: list[Callable[[Path], bool]], vcs_profile: VcsProfile
+) -> Generator[None, None, None]:
+    ignore_file = path / vcs_profile.ignore_filename
+    has_ignore_file = ignore_file.exists()
+    if has_ignore_file:
+        ignore_rules.append(vcs_profile.ignore_parser(ignore_file))
+        try:
+            yield
+        finally:
+            if has_ignore_file:
+                ignore_rules.pop()
+    else:
+        yield
+
+
+def _walk_repo(
+    path: Path, ignore_rules: list[Callable[[Path], bool]], vcs_profile: VcsProfile
+) -> Generator[Path, None, None]:
+    if path.is_dir():
+        with _ignore_rules_context(path, ignore_rules, vcs_profile):
+            for child in path.iterdir():
+                yield from _walk_repo(child, ignore_rules, vcs_profile)
+    else:
+        if not any(rule(path) for rule in ignore_rules):
+            yield path
