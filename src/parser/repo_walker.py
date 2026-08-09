@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import Generator, Callable
 from contextlib import contextmanager
-from itertools import chain
 
 from core.deps import get_config
 from core.vcs import get_vcs_profile, VcsProfile
@@ -10,9 +9,9 @@ from core.languages import get_language_profiles, LanguageProfile
 
 def walk_repo() -> Generator[Path, None, None]:
     config = get_config()
-    language_profiles = get_language_profiles(config.indexing.languages)
-    language_extensions = set(
-        chain.from_iterable(map(lambda lp: lp.extensions, language_profiles))
+    language_profiles = get_language_profiles(list(config.indexing.languages))
+    language_extensions = frozenset().union(
+        *[lp.extensions for lp in language_profiles]
     )
     yield from _walk_repo(
         config.repository.root,

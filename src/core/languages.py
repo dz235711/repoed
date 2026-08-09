@@ -24,7 +24,7 @@ class Language(StrEnum):
 @dataclass(frozen=True)
 class LanguageProfile:
     language: Language
-    extensions: list[str]
+    extensions: frozenset[str]
     parser_factory: Callable[[], Parser]
 
 
@@ -34,7 +34,7 @@ def _get_language_profiles() -> frozendict[Language, LanguageProfile]:
         {
             Language.PYTHON: LanguageProfile(
                 language=Language.PYTHON,
-                extensions=[".py"],
+                extensions=frozenset({".py"}),
                 parser_factory=lambda: Parser(TSLanguage(tspython.language())),
             ),
         }

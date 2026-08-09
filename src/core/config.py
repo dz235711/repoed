@@ -18,11 +18,11 @@ class Repository(BaseModel):
 
 
 class Ignore(BaseModel):
-    extra: list[str]
+    extra: frozenset[str]
 
 
 class Indexing(BaseModel):
-    languages: list[Language]
+    languages: frozenset[Language]
 
 
 class Config(BaseModel):
