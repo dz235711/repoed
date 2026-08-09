@@ -27,31 +27,22 @@ class LanguageProfile:
     extensions: frozenset[str]
 
 
-@cache
-def _get_language_profiles() -> frozendict[Language, LanguageProfile]:
-    return frozendict(
-        {
-            Language.PYTHON: LanguageProfile(
-                language=Language.PYTHON,
-                extensions=frozenset({".py"}),
-            ),
-        }
-    )
+_LANGUAGE_PROFILES = frozendict(
+    {
+        Language.PYTHON: LanguageProfile(
+            language=Language.PYTHON,
+            extensions=frozenset({".py"}),
+        ),
+    }
+)
+
+_EXTENSION_TO_LANGUAGE_PROFILE_MAP = frozendict(
+    {ext: prof for prof in _LANGUAGE_PROFILES.values() for ext in prof.extensions}
+)
 
 
 def get_language_profiles(languages: list[Language]) -> list[LanguageProfile]:
-    profiles = _get_language_profiles()
-    return [profiles[language] for language in languages]
-
-
-@cache
-def _get_extension_to_language_profile_map() -> frozendict[str, LanguageProfile]:
-    profiles = _get_language_profiles()
-    extension_map = {}
-    for profile in profiles.values():
-        for ext in profile.extensions:
-            extension_map[ext] = profile
-    return frozendict(extension_map)
+    return [_LANGUAGE_PROFILES[language] for language in languages]
 
 
 class LanguageExtensionNotFoundError(Exception):
@@ -59,7 +50,7 @@ class LanguageExtensionNotFoundError(Exception):
 
 
 def get_language_profile_by_extension(extension: str) -> LanguageProfile:
-    profile = _get_extension_to_language_profile_map().get(extension)
+    profile = _EXTENSION_TO_LANGUAGE_PROFILE_MAP.get(extension)
     if profile is None:
         raise LanguageExtensionNotFoundError(
             f"No language profile found for extension: {extension}"

@@ -24,18 +24,16 @@ class VcsProfile:
     ignore_filename: str
 
 
-@cache
-def _get_vcs_profiles() -> frozendict[Vcs, VcsProfile]:
-    return frozendict(
-        {
-            Vcs.GIT: VcsProfile(
-                vcs=Vcs.GIT,
-                ignore_parser=parse_gitignore,
-                ignore_filename=".gitignore",
-            ),
-        }
-    )
+_VCS_PROFILES = frozendict(
+    {
+        Vcs.GIT: VcsProfile(
+            vcs=Vcs.GIT,
+            ignore_parser=parse_gitignore,
+            ignore_filename=".gitignore",
+        ),
+    }
+)
 
 
 def get_vcs_profile(vcs: Vcs) -> VcsProfile:
-    return _get_vcs_profiles()[vcs]
+    return _VCS_PROFILES[vcs]
