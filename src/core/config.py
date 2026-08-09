@@ -1,16 +1,19 @@
 from tomllib import load as load_toml
-from pydantic import BaseModel
 from pathlib import Path
 
-from .enums import VCS, Language
+from pydantic import BaseModel
+
+from .languages import Language
+from .vcs import Vcs
+
 
 class Git(BaseModel):
     respect_gitignore: bool
 
 
 class Repository(BaseModel):
-    root: str
-    vcs: VCS
+    root: Path
+    vcs: Vcs
     git: Git
 
 
