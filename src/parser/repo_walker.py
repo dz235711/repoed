@@ -2,13 +2,13 @@ from pathlib import Path
 from typing import Generator, Callable
 from contextlib import contextmanager
 
-from core.deps import get_config
-from core.vcs import get_vcs_profile, VcsProfile
-from core.languages import get_language_profiles, LanguageProfile
+from config.deps import get_config
+from config.vcs import get_vcs_profile, VcsProfile
+from config.languages import get_language_profiles, LanguageProfile
+from config.config import Config
 
 
-def walk_repo() -> Generator[Path, None, None]:
-    config = get_config()
+def walk_repo(config: Config) -> Generator[Path, None, None]:
     language_profiles = get_language_profiles(list(config.indexing.languages))
     language_extensions = frozenset().union(
         *[lp.extensions for lp in language_profiles]
