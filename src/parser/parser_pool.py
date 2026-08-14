@@ -1,8 +1,16 @@
 from functools import cache
-from collections import defaultdict
 
-from config.languages import Language
-from parser.parser import Parser
+from frozendict import frozendict
+
+from config.language import Language
+from parser.protocol import Parser
+from python.parser import Parser as PythonParser
+
+_PARSER_MAP = frozendict(
+    {
+        Language.PYTHON: PythonParser,
+    }
+)
 
 
 class Parser_Pool:
@@ -13,7 +21,7 @@ class Parser_Pool:
         self._parsers: dict[Language, Parser] = {}
 
     def get_parser(self, language: Language) -> Parser:
-        return self._parsers.setdefault(language, Parser(language))
+        return self._parsers.setdefault(language, _PARSER_MAP[language]())
 
 
 @cache

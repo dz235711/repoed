@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from parser.parser_pool import get_parser_pool
-from config.languages import Language
+from config.language import Language
 
 
 def parse(file_path: Path, language: Language):

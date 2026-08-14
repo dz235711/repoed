@@ -3,8 +3,6 @@ from enum import StrEnum
 from functools import cache
 from typing import Callable, Optional
 
-import tree_sitter as ts
-import tree_sitter_python as tspython
 from frozendict import frozendict
 
 
@@ -45,14 +43,9 @@ def get_language_profiles(languages: list[Language]) -> list[LanguageProfile]:
     return [_LANGUAGE_PROFILES[language] for language in languages]
 
 
-class LanguageExtensionNotFoundError(Exception):
-    pass
+def get_language_profile(language: Language) -> LanguageProfile:
+    return get_language_profiles([language])[0]
 
 
 def get_language_profile_by_extension(extension: str) -> LanguageProfile:
-    profile = _EXTENSION_TO_LANGUAGE_PROFILE_MAP.get(extension)
-    if profile is None:
-        raise LanguageExtensionNotFoundError(
-            f"No language profile found for extension: {extension}"
-        )
-    return profile
+    return _EXTENSION_TO_LANGUAGE_PROFILE_MAP[extension]

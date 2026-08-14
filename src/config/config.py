@@ -1,9 +1,10 @@
 from tomllib import load as load_toml
 from pathlib import Path
+from functools import cache
 
 from pydantic import BaseModel
 
-from config.languages import Language
+from config.language import Language
 from config.vcs import Vcs
 
 
@@ -35,3 +36,11 @@ class Config(BaseModel):
         with open(path, "rb") as f:
             data = load_toml(f)
         return cls(**data)
+
+
+_CONFIG_PATH = Path(__file__).resolve().parent.parent.parent / "config.toml"
+
+
+@cache
+def get_config() -> Config:
+    return Config.load(_CONFIG_PATH)
