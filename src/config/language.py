@@ -19,7 +19,7 @@ class Language(StrEnum):
     KOTLIN = "kotlin"
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class LanguageProfile:
     language: Language
     extensions: frozenset[str]

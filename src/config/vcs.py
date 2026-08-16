@@ -17,7 +17,7 @@ class Vcs(StrEnum):
     CVS = "cvs"
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class VcsProfile:
     vcs: Vcs
     ignore_parser: Callable[[Path], Callable[[Path], bool]]
