@@ -4,7 +4,7 @@ from frozendict import frozendict
 
 from config.language import Language
 from parser.protocol import Parser
-from python.parser import Parser as PythonParser
+from parser.python.parser import Parser as PythonParser
 
 _PARSER_MAP = frozendict(
     {
