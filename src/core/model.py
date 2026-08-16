@@ -6,7 +6,7 @@ from config.language import Language
 
 @dataclass(frozen=True, slots=True)
 class ParsedFile:
-    path: Path
+    rel_path: Path
     language: Language
 
 
@@ -24,5 +24,11 @@ class SourceSpan:
 
 
 @dataclass(frozen=True, slots=True)
+class SourceName:
+    name: str
+    span: SourceSpan
+
+
+@dataclass(frozen=True, slots=True)
 class ParserContext:
-    path: Path
+    rel_path: Path
