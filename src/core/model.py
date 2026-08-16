@@ -21,3 +21,8 @@ class Coordinate:
 class SourceSpan:
     start: Coordinate
     end: Coordinate
+
+
+@dataclass(frozen=True)
+class ParserContext:
+    path: Path

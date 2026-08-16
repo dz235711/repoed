@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import StrEnum
 from functools import cache
-from typing import Callable, Optional
+from typing import Callable, Optional, Iterable
 
 from frozendict import frozendict
 
@@ -39,7 +39,7 @@ _EXTENSION_TO_LANGUAGE_PROFILE_MAP = frozendict(
 )
 
 
-def get_language_profiles(languages: list[Language]) -> list[LanguageProfile]:
+def get_language_profiles(languages: Iterable[Language]) -> list[LanguageProfile]:
     return [_LANGUAGE_PROFILES[language] for language in languages]
 
 

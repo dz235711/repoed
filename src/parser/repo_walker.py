@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Generator, Callable
+from typing import Generator, Callable, Iterable
 from contextlib import contextmanager
 
 from config.vcs import get_vcs_profile, VcsProfile, Vcs
@@ -10,7 +10,7 @@ type _IgnoreRule = Callable[[Path], bool]
 
 
 def walk_repo(
-    indexing_languages: list[Language], repository_root: Path, repository_vcs: Vcs
+    indexing_languages: Iterable[Language], repository_root: Path, repository_vcs: Vcs
 ) -> Generator[Path, None, None]:
     language_profiles = get_language_profiles(indexing_languages)
     language_extensions = frozenset().union(

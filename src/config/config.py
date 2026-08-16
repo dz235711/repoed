@@ -2,7 +2,9 @@ from tomllib import load as load_toml
 from pathlib import Path
 from functools import cache
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
+from core.pydantic_adaptor import FrozenDict
+from frozendict import frozendict
 
 from config.language import Language
 from config.vcs import Vcs
@@ -23,7 +25,7 @@ class Ignore(BaseModel):
 
 
 class Indexing(BaseModel):
-    languages: frozenset[Language]
+    languages: FrozenDict[Language, str]
 
 
 class Config(BaseModel):
