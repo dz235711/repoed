@@ -1,2 +1,4 @@
-.perplexity/
+.codex/
 __pycache__/
+.vscode/
+config.toml
