@@ -5,7 +5,7 @@ import tree_sitter_python as tspython
 import tree_sitter as ts
 
 from config.language import Language
-from core.model import SourceSpan, Coordinate, SourceName
+from core.model import SourceSpan, Coordinate, Expression
 from parser.ts_adaptor import span_from_node, child_of, decode, first_type_of
 from parser.python.model import (
     PythonParsedFile,
@@ -52,6 +52,8 @@ class Parser:
                     imports.append(_parse_future_import_statement(node))
                 case NodeType.IMPORT_FROM_STATEMENT:
                     imports.append(_parse_import_from_statement(node))
+                case NodeType.FUNCTION_DEFINITION:
+                    print(node)
                 case _:
                     fringe.extend(node.children)
 
@@ -62,11 +64,11 @@ class Parser:
         )
 
 
-def _parse_name(node: ts.Node) -> SourceName:
+def _parse_name(node: ts.Node) -> Expression:
     match NameTypes(node.type):
         case NameTypes.DOTTED_NAME | NameTypes.NAME:
             assert node.text is not None
-            return SourceName(name=decode(node.text), span=span_from_node(node))
+            return Expression(name=decode(node.text), span=span_from_node(node))
 
 
 def _parse_import_name(node: ts.Node) -> ImportName:
@@ -78,7 +80,7 @@ def _parse_import_name(node: ts.Node) -> ImportName:
             return replace(
                 import_name,
                 span=span_from_node(node),
-                alias=SourceName(name=decode(alias.text), span=span_from_node(alias)),
+                alias=Expression(name=decode(alias.text), span=span_from_node(alias)),
             )
         case ImportNameTypes.DOTTED_NAME:
             return ImportName(
@@ -106,7 +108,7 @@ def _parse_future_import_statement(node: ts.Node) -> FutureImportStatement:
     return FutureImportStatement(names=names, span=span)
 
 
-def _parse_module_name(node: ts.Node) -> SourceName | RelativeImport:
+def _parse_module_name(node: ts.Node) -> Expression | RelativeImport:
     match ModuleNameTypes(node.type):
         case ModuleNameTypes.DOTTED_NAME:
             return _parse_name(node)

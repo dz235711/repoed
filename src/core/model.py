@@ -24,7 +24,7 @@ class SourceSpan:
 
 
 @dataclass(frozen=True, slots=True)
-class SourceName:
+class Expression:
     name: str
     span: SourceSpan
 

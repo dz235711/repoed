@@ -14,6 +14,7 @@ class NodeType(StrEnum):
     IMPORT_STATEMENT = "import_statement"
     FUTURE_IMPORT_STATEMENT = "future_import_statement"
     IMPORT_FROM_STATEMENT = "import_from_statement"
+    FUNCTION_DEFINITION = "function_definition"
 
 
 class ImportStatementFields(StrEnum):
